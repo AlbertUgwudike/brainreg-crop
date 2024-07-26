@@ -29,7 +29,7 @@ else
     mkdir(OUTPUT_DIR);
 end
 
-for i = 1:0
+for i = 1:N_SLICES
 
     % we want all rows/cols ([1, inf]) at slice i ([i, i])
     pxl_region = { [1, inf], [1, inf], [i, i] };
