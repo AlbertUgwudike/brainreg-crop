@@ -9,8 +9,8 @@ atlas_struct = AtlasStructure(structure_filename);
 % registered atlas path
 REG_ATLAS = "./registered_atlas.tiff";
 
-% image data, can be downsampled or raw
-IMAGE_DATA = "./downsampled.tiff";
+% path to raw image data folder
+IMAGE_DIR = "./downsampled.tiff";
 
 % folder where you want the cropped images to go
 OUTPUT_DIR = "./outputs";
@@ -30,13 +30,14 @@ else
 end
 
 for i = 1:N_SLICES
+    raw_slice_fn = fullfile(IMAGE_DIR, ['Stitched_Z' sprintf('%.3d', i) '.tif']);
+    r_slice = imread(raw_slice_fn, 'PixelRegion', pxl_region);
 
     % we want all rows/cols ([1, inf]) at slice i ([i, i])
     pxl_region = { [1, inf], [1, inf], [i, i] };
 
     % read atlas and corresponding raw data slices
     a_slice = tiffreadVolume(REG_ATLAS, 'PixelRegion', pxl_region);
-    r_slice = tiffreadVolume(IMAGE_DATA, 'PixelRegion', pxl_region);
 
     % upscale the atlas slice to match size of raw data slice
     a_slice = imresize(a_slice, size(r_slice));
